@@ -19,7 +19,8 @@
         android:id="@+id/calculator_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Calculator" />
+        android:text="Calculator"
+        android:onClick="openCalculatorActivity"/>
 
     <Button
         android:id="@+id/alarm_button"
