@@ -300,6 +300,34 @@ public class CalculatorActivity extends AppCompatActivity {
             }
         });
 
+        sin.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mainOutput.setText(mainOutput.getText().toString() + "sin");
+            }
+        });
+
+        cos.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mainOutput.setText(mainOutput.getText().toString() + "cos");
+            }
+        });
+
+        tan.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mainOutput.setText(mainOutput.getText().toString() + "tan");
+            }
+        });
+
+
         equal.setOnClickListener(new View.OnClickListener() {
 
             @Override

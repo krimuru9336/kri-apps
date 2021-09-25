@@ -135,7 +135,7 @@
                             android:weightSum="5">
 
                             <Button
-                                android:id="@+id/bsin"
+                                android:id="@+id/sin"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_margin="3dp"
@@ -148,7 +148,7 @@
                                 android:textSize="15sp" />
 
                             <Button
-                                android:id="@+id/bcos"
+                                android:id="@+id/cos"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_margin="3dp"
