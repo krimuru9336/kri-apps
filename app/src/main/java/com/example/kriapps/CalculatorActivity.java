@@ -4,16 +4,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 //
 //import javax.script.ScriptEngineManager;
 //import javax.script.ScriptEngine;
 //import javax.script.ScriptException;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.ScriptableObject;
 
 public class CalculatorActivity extends AppCompatActivity {
     public TextView secOutput;
@@ -28,7 +24,7 @@ public class CalculatorActivity extends AppCompatActivity {
     public Button log;
     public Button ln;
     public Button fact;
-    public Button square;
+    public Button power;
     public Button sqrt;
     public Button inv;
     public Button b0;
@@ -68,7 +64,7 @@ public class CalculatorActivity extends AppCompatActivity {
         log = findViewById(R.id.log);
         ln = findViewById(R.id.ln);
         fact = findViewById(R.id.fact);
-        square = findViewById(R.id.square);
+        power = findViewById(R.id.power);
         sqrt = findViewById(R.id.sqrt);
         inv = findViewById(R.id.inv);
 
@@ -130,6 +126,15 @@ public class CalculatorActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 mainOutput.setText(mainOutput.getText().toString() + ")");
+            }
+        });
+
+        power.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mainOutput.setText(mainOutput.getText().toString() + "^");
             }
         });
 
@@ -277,29 +282,119 @@ public class CalculatorActivity extends AppCompatActivity {
             }
         });
 
+        log.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mainOutput.setText(mainOutput.getText().toString() + "log");
+            }
+        });
+
+        ln.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mainOutput.setText(mainOutput.getText().toString() + "ln");
+            }
+        });
+
         equal.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 String input = mainOutput.getText().toString();
-                String res = evaluate(input);
+                String res = evaluate(input)+"";
                 mainOutput.setText(res);
                 secOutput.setText(input);
             }
         });
     }
 
-    private String evaluate(String input) {
-        String res="";
-        Context jsCx = Context.enter();
-        Context.getCurrentContext().setOptimizationLevel(-1);
-        ScriptableObject scope = jsCx.initStandardObjects();
-        Object result = jsCx.evaluateString(scope, input , "formula", 0, null);
-        Context.exit();
-        Toast.makeText(this, result+"", Toast.LENGTH_SHORT).show();
-        res = result.toString();
-        return res;
+    private double evaluate(final String str) {
+        return new Object() {
+            int pos = -1, ch;
+
+            void nextChar() {
+                ch = (++pos < str.length()) ? str.charAt(pos) : -1;
+            }
+
+            boolean eat(int charToEat) {
+                while (ch == ' ') nextChar();
+                if (ch == charToEat) {
+                    nextChar();
+                    return true;
+                }
+                return false;
+            }
+
+            double parse() {
+                nextChar();
+                double x = parseExpression();
+                if (pos < str.length()) throw new RuntimeException("Unexpected: " + (char)ch);
+                return x;
+            }
+
+            // Grammar:
+            // expression = term | expression `+` term | expression `-` term
+            // term = factor | term `*` factor | term `/` factor
+            // factor = `+` factor | `-` factor | `(` expression `)`
+            //        | number | functionName factor | factor `^` factor
+
+            double parseExpression() {
+                double x = parseTerm();
+                for (;;) {
+                    if      (eat('+')) x += parseTerm(); // addition
+                    else if (eat('-')) x -= parseTerm(); // subtraction
+                    else return x;
+                }
+            }
+
+            double parseTerm() {
+                double x = parseFactor();
+                for (;;) {
+                    if      (eat('*')) x *= parseFactor(); // multiplication
+                    else if (eat('/')) x /= parseFactor(); // division
+                    else return x;
+                }
+            }
+
+            double parseFactor() {
+                if (eat('+')) return parseFactor(); // unary plus
+                if (eat('-')) return -parseFactor(); // unary minus
+
+                double x;
+                int startPos = this.pos;
+                if (eat('(')) { // parentheses
+                    x = parseExpression();
+                    eat(')');
+                } else if ((ch >= '0' && ch <= '9') || ch == '.') { // numbers
+                    while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
+                    x = Double.parseDouble(str.substring(startPos, this.pos));
+                } else if (ch >= 'a' && ch <= 'z') { // functions
+                    while (ch >= 'a' && ch <= 'z') nextChar();
+                    String func = str.substring(startPos, this.pos);
+                    x = parseFactor();
+                    if (func.equals("sqrt")) x = Math.sqrt(x);
+                    else if (func.equals("sin")) x = Math.sin(Math.toRadians(x));
+                    else if (func.equals("cos")) x = Math.cos(Math.toRadians(x));
+                    else if (func.equals("tan")) x = Math.tan(Math.toRadians(x));
+                    else if (func.equals("log")) x = Math.log10(x);
+                    else if (func.equals("ln")) x = Math.log(x);
+                    else throw new RuntimeException("Unknown function: " + func);
+                } else {
+                    throw new RuntimeException("Unexpected: " + (char)ch);
+                }
+
+                if (eat('^')) x = Math.pow(x, parseFactor()); // exponentiation
+
+                return x;
+            }
+        }.parse();
+
+
     }
 
 

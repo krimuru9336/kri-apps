@@ -230,14 +230,14 @@
                                 android:textSize="15sp" />
 
                             <Button
-                                android:id="@+id/square"
+                                android:id="@+id/power"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_margin="3dp"
                                 android:layout_weight="1"
                                 android:backgroundTint="@color/black_shade_2"
                                 android:padding="6dp"
-                                android:text="x²"
+                                android:text="x^y"
                                 android:textAllCaps="false"
                                 android:textColor="#ffa500"
                                 android:textSize="15sp" />
