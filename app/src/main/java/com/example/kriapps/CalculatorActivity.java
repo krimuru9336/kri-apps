@@ -1,10 +1,10 @@
 package com.example.kriapps;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 //
 //import javax.script.ScriptEngineManager;
 //import javax.script.ScriptEngine;
@@ -61,6 +61,7 @@ public class CalculatorActivity extends AppCompatActivity {
         clear = findViewById(R.id.clear);
         leftBracket = findViewById(R.id.leftBracket);
         rightBracket = findViewById(R.id.rightBracket);
+
         sin = findViewById(R.id.sin);
         cos = findViewById(R.id.cos);
         tan = findViewById(R.id.tan);
@@ -90,6 +91,34 @@ public class CalculatorActivity extends AppCompatActivity {
         equal = (Button)findViewById(R.id.equal);
         decimal = (Button)findViewById(R.id.decimal);
 
+        allClear.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mainOutput.setText("");
+                secOutput.setText("");
+            }
+        });
+
+
+        leftBracket.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mainOutput.setText(mainOutput.getText().toString() + "(");
+            }
+        });
+
+        rightBracket.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mainOutput.setText(mainOutput.getText().toString() + ")");
+            }
+        });
 
         b0.setOnClickListener(new View.OnClickListener() {
 
@@ -255,8 +284,10 @@ public class CalculatorActivity extends AppCompatActivity {
         ScriptableObject scope = jsCx.initStandardObjects();
         Object result = jsCx.evaluateString(scope, input , "formula", 0, null);
         Context.exit();
-        System.out.println(result);
+        Toast.makeText(this, result+"", Toast.LENGTH_SHORT).show();
         res = result.toString();
         return res;
     }
+
+
 }
