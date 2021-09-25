@@ -12,7 +12,8 @@
         android:id="@+id/weather_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Weather" />
+        android:text="Weather"
+        android:onClick="openWeatherActivity"/>
 
     <Button
         android:id="@+id/calculator_button"
