@@ -101,6 +101,19 @@ public class CalculatorActivity extends AppCompatActivity {
             }
         });
 
+        clear.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                String str = mainOutput.getText().toString();
+                if(!str.equals("")) {
+                    str = str.substring(0, str.length() - 1);
+                    mainOutput.setText(str);
+                }
+            }
+        });
+
 
         leftBracket.setOnClickListener(new View.OnClickListener() {
 
