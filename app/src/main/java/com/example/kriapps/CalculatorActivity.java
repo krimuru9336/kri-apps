@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 //
 //import javax.script.ScriptEngineManager;
 //import javax.script.ScriptEngine;
@@ -126,15 +127,6 @@ public class CalculatorActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 mainOutput.setText(mainOutput.getText().toString() + ")");
-            }
-        });
-
-        power.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                mainOutput.setText(mainOutput.getText().toString() + "^");
             }
         });
 
@@ -282,6 +274,29 @@ public class CalculatorActivity extends AppCompatActivity {
             }
         });
 
+        power.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mainOutput.setText(mainOutput.getText().toString() + "^");
+            }
+        });
+
+        fact.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                if(!mainOutput.getText().equals("")) {
+                    mainOutput.setText(mainOutput.getText().toString() + "!");
+                }
+                else {
+                    Toast.makeText(CalculatorActivity.this, "Please Input a Valid Expression", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         log.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -417,12 +432,19 @@ public class CalculatorActivity extends AppCompatActivity {
                 }
 
                 if (eat('^')) x = Math.pow(x, parseFactor()); // exponentiation
-
+//                if (eat('!')) x = Math.pow(x, parseFactor()); //fact
                 return x;
             }
         }.parse();
 
 
+    }
+
+    private double factorial(double x) {
+        if(x<=1)
+            return 1;
+        else
+            return x * factorial(x-1);
     }
 
 
