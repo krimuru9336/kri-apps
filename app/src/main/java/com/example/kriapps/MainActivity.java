@@ -23,4 +23,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CalculatorActivity.class);
         startActivity(intent);
     }
+
+    public void openAlarmActivity(View view) {
+        Intent intent = new Intent(this, AlarmActivity.class);
+        startActivity(intent);
+    }
 }
